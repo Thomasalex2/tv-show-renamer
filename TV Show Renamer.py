@@ -55,7 +55,7 @@ def RetrievefromInternet():
 		try:
 			index = re.search(r"\bS[0-9][0-9]E[0-9][0-9]\b", old_name, re.I).start()
 		except AttributeError:
-			print "Current filenames is not in the expected format\n"
+			print "Filenames are not in the expected format\n"
 			return
 
 		season = int(old_name[index+1:index+3])
