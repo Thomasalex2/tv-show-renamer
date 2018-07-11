@@ -3,22 +3,25 @@ import requests
 import bs4
 import re
 
-#============================CONFIGURATION=====================================
+verification = 'Y'
+
+#============================CONFIGURATION============================================
 
 #------------------------------FOR BOTH--------------------------------
 
-dest_directory = 'D:\TV Shows\Stranger Things\Season 2'
-name_of_series = 'Stranger Things'
-episode_per_season = 8    #Comment out either this or next line
-#total_episodes = 0
+dest_directory = 'D:\TV Shows\The Big Bang Theory\Season 11'
+name_of_series = 'Big Bang Theory'
+#episode_per_season = 24   #Comment out either this or next line
+total_episodes = 231
 
 #---------------------FOR RETRIEVAL FROM INTERNET----------------------
 
-download_page = "https://en.wikipedia.org/wiki/Stranger_Things"
+download_page = "https://en.wikipedia.org/wiki/List_of_The_Big_Bang_Theory_episodes"
 
-#==============================================================================
-verification = 'Y'
+#=====================================================================================
 
+
+#==========================FOR SXXEXX FORMAT==========================
 
 def RetrievefromInternet():
 
@@ -43,7 +46,6 @@ def RetrievefromInternet():
 		print formatted_name
 
 	print '\n\n'
-	new_names_list_wiki = new_names_list_wiki[:16]
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
@@ -79,7 +81,7 @@ def RetrievefromInternet():
 				file_format = old_name.split('.')[-1]
 				season_no = old_name[index:index+6]
 				new_name = name_of_series + ' - ' + season_no + ' - ' + epi_name_mod + '.' + file_format
-				print old_name,'-->', new_name
+				print old_name,'\n', '-->', new_name
 
 				#verification = raw_input ('Y/N: ')
 				if verification.upper() == 'Y':
@@ -95,7 +97,7 @@ def RetrievefromInternet():
 		print no_of_operations - no_of_operations_done, "files were not renamed"
 
 
-
+#==============================FOR XX.EPISODE_NAME FORMAT========================================
 
 def ReformatNames():
 
@@ -141,6 +143,8 @@ def ReformatNames():
 		print no_of_operations - no_of_operations_done, "files were not renamed"
 
 
+
+#====================================MAIN=============================================
 
 def main():
 
