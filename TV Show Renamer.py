@@ -7,23 +7,22 @@ import re
 
 #------------------------------FOR BOTH--------------------------------
 
-dest_directory = 'D:\TV Shows\Ben 10 Omniverse'
-name_of_series = 'Ben 10 Omniverse'
+dest_directory = 'D:\TV Shows\Stranger Things\Season 2'
+name_of_series = 'Stranger Things'
+episode_per_season = 8    #Comment out either this or next line
+#total_episodes = 0
 
 #---------------------FOR RETRIEVAL FROM INTERNET----------------------
 
-download_page = "https://en.wikipedia.org/wiki/List_of_Ben_10:_Omniverse_episodes"
-
-#------------------------FOR REFORMATTING NAMES------------------------
-
-season = 1
-episode_per_season = 10    #Comment out either this or next line
-#total_episodes = 0
+download_page = "https://en.wikipedia.org/wiki/Stranger_Things"
 
 #==============================================================================
+verification = 'Y'
+
 
 def RetrievefromInternet():
 
+	new_names_list_wiki = []
 	new_names_list = []
 	res = requests.get(download_page)
 	res.raise_for_status()
@@ -40,10 +39,11 @@ def RetrievefromInternet():
 		episode_no = episode.find('th', attrs={'scope':'row'}).getText()
 		episode_name = episode.find('td', attrs={'class':'summary'}).getText()
 		formatted_name = episode_no + '. ' + episode_name[1:-1]
-		new_names_list.append(formatted_name)
+		new_names_list_wiki.append(formatted_name)
 		print formatted_name
 
 	print '\n\n'
+	new_names_list_wiki = new_names_list_wiki[:16]
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
@@ -58,7 +58,7 @@ def RetrievefromInternet():
 
 		season = int(old_name[index+1:index+3])
 		identifier = old_name[index+4:index+6]
-		for match in new_names_list:
+		for match in new_names_list_wiki:
 			dot_index = match.find('.')
 
 			try:
@@ -68,11 +68,20 @@ def RetrievefromInternet():
 
 			if int(identifier) == (int(match[:dot_index]) - subtract_episodes):
 				epi_name = match.split(' ',1)[1]
+				epi_name_mod = ""
+
+				for ch in epi_name:
+					if ch in '<>:"\/|?*':
+						epi_name_mod = epi_name_mod + ""
+					else:
+						epi_name_mod = epi_name_mod + ch
+
 				file_format = old_name.split('.')[-1]
-				new_name = name_of_series + ' - ' + old_name[index:index+6] + ' - ' + epi_name + '.' + file_format
+				season_no = old_name[index:index+6]
+				new_name = name_of_series + ' - ' + season_no + ' - ' + epi_name_mod + '.' + file_format
 				print old_name,'-->', new_name
 
-				verification = raw_input ('Y/N: ')
+				#verification = raw_input ('Y/N: ')
 				if verification.upper() == 'Y':
 					old_path = os.path.join(dest_directory, old_name)
 					new_path = os.path.join(dest_directory, new_name)
@@ -86,8 +95,11 @@ def RetrievefromInternet():
 		print no_of_operations - no_of_operations_done, "files were not renamed"
 
 
+
+
 def ReformatNames():
 
+	season = input("Season: ")
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
@@ -117,12 +129,11 @@ def ReformatNames():
 
 		#verification = raw_input ('Y/N: ')
 
-		#if verification.upper() == 'Y':
-		old_path = os.path.join(dest_directory, old_name)
-		new_path = os.path.join(dest_directory, new_name)
-		os.rename(old_path,new_path)
-		no_of_operations_done +=1
-		#print 'Sucessfully Renamed\n'
+		if verification.upper() == 'Y':
+			old_path = os.path.join(dest_directory, old_name)
+			new_path = os.path.join(dest_directory, new_name)
+			os.rename(old_path,new_path)
+			no_of_operations_done +=1
 
 	if no_of_operations == no_of_operations_done:
 		print "All Files renamed successfully"
@@ -138,10 +149,13 @@ def main():
 	print "2. Reformat Names"
 	
 	algo = input ("1/2: ")
+
 	if algo == 1:
 		RetrievefromInternet()
+
 	elif algo == 2:
 		ReformatNames()
+
 	else:
 		print "Invalid Choice"
 
