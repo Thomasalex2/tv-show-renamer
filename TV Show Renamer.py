@@ -9,14 +9,14 @@ verification = 'Y'
 
 #------------------------------FOR BOTH--------------------------------
 
-dest_directory = 'D:\TV Shows\The Big Bang Theory\Season 11'
-name_of_series = 'Big Bang Theory'
+dest_directory = 'D:\TV Shows\House MD\House MD Season 1\House.M.D.Season.1.S01.720p.WEBDL.x265.HEVCQmanUTR'
+name_of_series = 'House'
 #episode_per_season = 24   #Comment out either this or next line
-total_episodes = 231
+total_episodes = 0
 
 #---------------------FOR RETRIEVAL FROM INTERNET----------------------
 
-download_page = "https://en.wikipedia.org/wiki/List_of_The_Big_Bang_Theory_episodes"
+download_page = "https://en.wikipedia.org/wiki/List_of_House_episodes"
 
 #=====================================================================================
 
@@ -127,7 +127,7 @@ def ReformatNames():
 
 		new_name = name_of_series + ' - ' + 'S' + str('%02d' % season) + 'E' + str('%02d' % (ep_no - subtract_episodes)) + ' - ' + epi_name
 
-		print old_name,'-->', new_name, '\n'
+		print old_name,'-->', new_name
 
 		#verification = raw_input ('Y/N: ')
 
@@ -136,12 +136,52 @@ def ReformatNames():
 			new_path = os.path.join(dest_directory, new_name)
 			os.rename(old_path,new_path)
 			no_of_operations_done +=1
+			print
 
 	if no_of_operations == no_of_operations_done:
 		print "All Files renamed successfully"
 	else:
 		print no_of_operations - no_of_operations_done, "files were not renamed"
 
+
+def ReformatNames2():
+
+	old_names_list = os.listdir(dest_directory)
+	no_of_operations = len(old_names_list)
+	no_of_operations_done = 0
+
+	for old_name in old_names_list:
+
+		flag = 0
+
+		for i in range(len(old_name)):
+			if old_name[i] == '[':
+				flag = 1
+				season = str('%02d' % int(old_name[i+1]))
+				epi_no = str(old_name[i+3]) + str(old_name[i+4])
+
+		if flag == 0:
+			continue
+
+		epi_name = old_name.split('-')[-1]
+
+		new_name = name_of_series + ' - ' + 'S' + season + 'E' + epi_no + ' -' + epi_name
+
+		print old_name,'-->', new_name
+
+		#verification = raw_input ('Y/N: ')
+
+		if verification.upper() == 'Y':
+			old_path = os.path.join(dest_directory, old_name)
+			new_path = os.path.join(dest_directory, new_name)
+			os.rename(old_path,new_path)
+			no_of_operations_done +=1
+			print
+
+	if no_of_operations == no_of_operations_done:
+		print "All Files renamed successfully"
+	else:
+		print no_of_operations - no_of_operations_done, "files were not renamed"
 
 
 #====================================MAIN=============================================
@@ -150,15 +190,19 @@ def main():
 
 	print "Which Algorithm do you want to use to rename ?"
 	print "1. Retrieve from Internet"
-	print "2. Reformat Names"
+	print "2. Reformat Names - 'XX.EPISODE_NAME'"
+	print "3. Reformat Names - 'SERIES - [SxEE] - EPISODE_NAME'"
 	
-	algo = input ("1/2: ")
+	algo = input ("1/2/3: ")
 
 	if algo == 1:
 		RetrievefromInternet()
 
 	elif algo == 2:
 		ReformatNames()
+
+	elif algo == 3:
+		ReformatNames2()
 
 	else:
 		print "Invalid Choice"
