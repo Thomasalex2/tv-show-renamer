@@ -9,10 +9,10 @@ verification = 'Y'
 
 #------------------------------FOR BOTH--------------------------------
 
-dest_directory = 'D:\TV Shows\House MD\House MD Season 1\House.M.D.Season.1.S01.720p.WEBDL.x265.HEVCQmanUTR'
+dest_directory = 'D:\TV Shows\House MD\House MD Season 7'
 name_of_series = 'House'
 #episode_per_season = 24   #Comment out either this or next line
-total_episodes = 0
+total_episodes = 132
 
 #---------------------FOR RETRIEVAL FROM INTERNET----------------------
 
@@ -52,14 +52,22 @@ def RetrievefromInternet():
 
 	for old_name in old_names_list:
 
+		flag = 0
 		try:
 			index = re.search(r"\bS[0-9][0-9]E[0-9][0-9]\b", old_name, re.I).start()
 		except AttributeError:
-			print "Filenames are not in the expected format\n"
-			return
+			try:
+				index = re.search(r"\bS[0-9][0-9](.)E[0-9][0-9]\b", old_name, re.I).start()
+				flag = 1
+			except AttributeError:
+				print "Filenames are not in the expected format\n"
+				return
 
 		season = int(old_name[index+1:index+3])
-		identifier = old_name[index+4:index+6]
+		if flag == 1:
+			identifier = old_name[index+5:index+7]
+		else:
+			identifier = old_name[index+4:index+6]
 		for match in new_names_list_wiki:
 			dot_index = match.find('.')
 
@@ -79,11 +87,17 @@ def RetrievefromInternet():
 						epi_name_mod = epi_name_mod + ch
 
 				file_format = old_name.split('.')[-1]
-				season_no = old_name[index:index+6]
+
+				if flag ==1:
+					temp = old_name[index:index+7].split('.')
+					season_no = temp[0] + temp[1]
+				else:
+					season_no = old_name[index:index+6]
+
 				new_name = name_of_series + ' - ' + season_no + ' - ' + epi_name_mod + '.' + file_format
 				print old_name,'\n', '-->', new_name
 
-				#verification = raw_input ('Y/N: ')
+				verification = raw_input ('Y/N: ')
 				if verification.upper() == 'Y':
 					old_path = os.path.join(dest_directory, old_name)
 					new_path = os.path.join(dest_directory, new_name)
@@ -189,8 +203,8 @@ def ReformatNames2():
 def main():
 
 	print "Which Algorithm do you want to use to rename ?"
-	print "1. Retrieve from Internet"
-	print "2. Reformat Names - 'XX.EPISODE_NAME'"
+	print "1. Retrieve from Internet - '...SXXEXX...'"
+	print "2. Reformat Names - 'EPISODE_NO. EPISODE_NAME'"
 	print "3. Reformat Names - 'SERIES - [SxEE] - EPISODE_NAME'"
 	
 	algo = input ("1/2/3: ")
