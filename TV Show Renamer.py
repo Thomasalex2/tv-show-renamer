@@ -49,26 +49,21 @@ def RetrievefromInternet():
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
+	pattern = re.compile(r'\bS(\d\d(|.)E(\d\d)\b', re.IGNORECASE)
 
 	for old_name in old_names_list:
 
-		flag = 0
-		try:
-			index = re.search(r"\bS[0-9][0-9]E[0-9][0-9]\b", old_name, re.I).start()
-		except AttributeError:
-			try:
-				index = re.search(r"\bS[0-9][0-9](.)E[0-9][0-9]\b", old_name, re.I).start()
-				flag = 1
-			except AttributeError:
-				print "Filenames are not in the expected format\n"
-				return
+		extract = pattern.search(old_name)
 
-		season = int(old_name[index+1:index+3])
-		if flag == 1:
-			identifier = old_name[index+5:index+7]
-		else:
-			identifier = old_name[index+4:index+6]
+		if extract == None:
+			print "Filenames are not in the expected format\n"
+			return
+
+		season = extract.group(1)
+		identifier = extract.group(3)
+
 		for match in new_names_list_wiki:
+
 			dot_index = match.find('.')
 
 			try:
@@ -88,13 +83,7 @@ def RetrievefromInternet():
 
 				file_format = old_name.split('.')[-1]
 
-				if flag ==1:
-					temp = old_name[index:index+7].split('.')
-					season_no = temp[0] + temp[1]
-				else:
-					season_no = old_name[index:index+6]
-
-				new_name = name_of_series + ' - ' + season_no + ' - ' + epi_name_mod + '.' + file_format
+				new_name = name_of_series + ' - ' + season + ' - ' + epi_name_mod + '.' + file_format
 				print old_name,'\n', '-->', new_name
 
 				verification = raw_input ('Y/N: ')
@@ -163,19 +152,18 @@ def ReformatNames2():
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
+	pattern = re.compile(r'\b(\d{1,2})\w(\d\d)\b')
 
 	for old_name in old_names_list:
 
-		flag = 0
+		extract = pattern.search(old_name)
 
-		for i in range(len(old_name)):
-			if old_name[i] == '[':
-				flag = 1
-				season = str('%02d' % int(old_name[i+1]))
-				epi_no = str(old_name[i+3]) + str(old_name[i+4])
+		if extract == None:
+			print "Filenames are not in the expected format\n"
+			return
 
-		if flag == 0:
-			continue
+		season = str('%02d' % int(extract.group(1)))
+		epi_no = str('%02d' % int(extract.group(2)))
 
 		epi_name = old_name.split('-')[-1]
 
