@@ -9,14 +9,14 @@ verification = 'Y'
 
 #------------------------------FOR BOTH--------------------------------
 
-dest_directory = 'D:\TV Shows\House MD\House MD Season 7'
-name_of_series = 'House'
+dest_directory = 'D:\Downloads\How to Get Away with Murder S02 Season 2 x264 Complete'
+name_of_series = 'How to Get Away with Murder'
 #episode_per_season = 24   #Comment out either this or next line
-total_episodes = 132
+total_episodes = 15
 
 #---------------------FOR RETRIEVAL FROM INTERNET----------------------
 
-download_page = "https://en.wikipedia.org/wiki/List_of_House_episodes"
+download_page = "https://en.wikipedia.org/wiki/List_of_How_to_Get_Away_with_Murder_episodes"
 
 #=====================================================================================
 
@@ -49,7 +49,7 @@ def RetrievefromInternet():
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
-	pattern = re.compile(r'\bS(\d\d(|.)E(\d\d)\b', re.IGNORECASE)
+	pattern = re.compile(r'\bS(\d\d)(|.)E(\d\d)\b', re.IGNORECASE)
 
 	for old_name in old_names_list:
 
@@ -81,9 +81,10 @@ def RetrievefromInternet():
 					else:
 						epi_name_mod = epi_name_mod + ch
 
+
 				file_format = old_name.split('.')[-1]
 
-				new_name = name_of_series + ' - ' + season + ' - ' + epi_name_mod + '.' + file_format
+				new_name = name_of_series + ' - ' + 'S' + season + 'E' + identifier + ' - ' + epi_name_mod + '.' + file_format
 				print old_name,'\n', '-->', new_name
 
 				verification = raw_input ('Y/N: ')
@@ -191,7 +192,7 @@ def ReformatNames2():
 def main():
 
 	print "Which Algorithm do you want to use to rename ?"
-	print "1. Retrieve from Internet - '...SXXEXX...'"
+	print "1. Retrieve from Internet - '-SXXEXX-'"
 	print "2. Reformat Names - 'EPISODE_NO. EPISODE_NAME'"
 	print "3. Reformat Names - 'SERIES - [SxEE] - EPISODE_NAME'"
 	
