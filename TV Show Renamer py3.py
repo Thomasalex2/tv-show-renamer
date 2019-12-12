@@ -3,12 +3,14 @@ import requests
 import bs4
 import re
 
-#Type out Y?N below if verification IS or IS NOT needed
-required_verification = 'N'
+
 
 #============================CONFIGURATION============================================
 
 #------------------------------FOR BOTH--------------------------------
+
+#Type out Y?N below if verification IS or IS NOT needed
+required_verification = 'N'
 
 dest_directory = 'F:\Arrow'
 name_of_series = 'Arrow'
@@ -20,9 +22,6 @@ total_episodes = 160
 download_page = "https://en.wikipedia.org/wiki/List_of_Arrow_episodes"
 
 #=====================================================================================
-
-
-#==========================FOR SXXEXX FORMAT==========================
 
 def RetrievefromInternet():
 
@@ -139,7 +138,10 @@ def ReformatNames():
 
 		print(old_name,'-->', new_name)
 
-		#verification = raw_input ('Y/N: ')
+		if required_verification == 'Y':
+			verification = input ('Y/N: ')
+		else:
+			verification = 'Y'
 
 		if verification.upper() == 'Y':
 			old_path = os.path.join(dest_directory, old_name)
@@ -178,7 +180,10 @@ def ReformatNames2():
 
 		print(old_name,'-->', new_name)
 
-		#verification = raw_input ('Y/N: ')
+		if required_verification == 'Y':
+			verification = input ('Y/N: ')
+		else:
+			verification = 'Y'
 
 		if verification.upper() == 'Y':
 			old_path = os.path.join(dest_directory, old_name)
