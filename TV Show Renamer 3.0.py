@@ -2,17 +2,18 @@ import os
 import requests
 import bs4
 import re
+import PySimpleGUI as sg
 
-
+sg.change_look_and_feel('DefaultNoMoreNagging')
 
 #============================CONFIGURATION============================================
 
 #------------------------------FOR BOTH--------------------------------
 
 #Type out Y?N below if verification IS or IS NOT needed
-required_verification = 'N'
+required_verification = 'Y'
 
-dest_directory = 'F:\Arrow'
+#dest_directory = 'F:\Arrow'
 name_of_series = 'Arrow'
 #episode_per_season = 24   #Comment out either this or next line
 total_episodes = 160
@@ -23,7 +24,31 @@ download_page = "https://en.wikipedia.org/wiki/List_of_Arrow_episodes"
 
 #=====================================================================================
 
+def DirectoryFetching():
+
+	layout = [[sg.Text('Select the Directory')],
+            [sg.Input(), sg.FolderBrowse()],
+            [sg.OK(), sg.Cancel()] ]
+
+	window = sg.Window('TV Show Renamer 3.0', layout, keep_on_top=True)
+	event, values = window.read()
+	window.close()
+
+	if event == 'OK' and values[0] != '':
+		return values[0]
+
+	elif event == 'Cancel':
+		print ('\nCancelled\n ==PROGRAM RESTARTED==\n')
+		main()
+	
+	else:
+		print ("Please select the directory\n")
+		DirectoryFetching()
+
+
 def RetrievefromInternet():
+
+	dest_directory = DirectoryFetching()
 
 	new_names_list_wiki = []
 	new_names_list = []
@@ -110,6 +135,7 @@ def RetrievefromInternet():
 
 def ReformatNames():
 
+	dest_directory = DirectoryFetching()
 	season = eval(input("Season: "))
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
@@ -158,6 +184,7 @@ def ReformatNames():
 
 def ReformatNames2():
 
+	dest_directory = DirectoryFetching()
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
