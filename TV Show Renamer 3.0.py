@@ -40,16 +40,23 @@ def ShowSelection():
 
 	layout = [[sg.Text('Select the Show')],
 	         [sg.Listbox(values=Show_names,select_mode=sg.LISTBOX_SELECT_MODE_SINGLE, size=(50,6), bind_return_key=True, auto_size_text=True)],
-	         [sg.Submit()]]
+	         [sg.Submit(), sg.Cancel()]]
 	window = sg.Window('TV Show Renamer 3.0', layout, keep_on_top=True,finalize=True, size = (400,200))
 	event, values = window.read()
-	name_of_series = values[0][0]
 	window.close()
 
-	download_page = ShowDB.get(name_of_series)[0]
+	if (event == 0 or event == 'Submit') and values[0][0] != '':
+		name_of_series = values[0][0]
+		download_page = ShowDB.get(name_of_series)[0]
+		return name_of_series, download_page
 
-	return name_of_series, download_page
-
+	elif event == 'Cancel':
+		print ('\nCancelled\n ==PROGRAM RESTARTED==\n')
+		main()
+	
+	else:
+		print ("Please select the show\n")
+		ShowSelection()
 
 
 def DirectoryFetching():
