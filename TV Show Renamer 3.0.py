@@ -158,7 +158,8 @@ def RetrievefromInternet():
 					print('Sucessfully Renamed\n')
 
 	if no_of_operations == no_of_operations_done:
-		print("All Files renamed successfully")
+		print("All Files renamed successfully\n\n")
+		main()
 	else:
 		print(no_of_operations - no_of_operations_done, "files were not renamed")
 
@@ -262,7 +263,7 @@ def ReformatNames2():
 def main():
 
 	print("Which Algorithm do you want to use to rename ?")
-	print("1. Retrieve from Internet - '-SXXEXX-'")
+	print("1. Retrieve from Internet - 'Show_name - SXXEXX - Episode_name'")
 	print("2. Reformat Names - 'EPISODE_NO. EPISODE_NAME'")
 	print("3. Reformat Names - 'SERIES - [SxEE] - EPISODE_NAME'")
 	
