@@ -2,6 +2,7 @@ import os
 import requests
 import bs4
 import re
+import csv
 import PySimpleGUI as sg
 
 sg.change_look_and_feel('DefaultNoMoreNagging')
@@ -13,16 +14,41 @@ sg.change_look_and_feel('DefaultNoMoreNagging')
 #Type out Y?N below if verification IS or IS NOT needed
 required_verification = 'Y'
 
-#dest_directory = 'F:\Arrow'
-name_of_series = 'Arrow'
+#name_of_series = 'Arrow'
 #episode_per_season = 24   #Comment out either this or next line
 total_episodes = 160
 
 #---------------------FOR RETRIEVAL FROM INTERNET----------------------
 
-download_page = "https://en.wikipedia.org/wiki/List_of_Arrow_episodes"
+#download_page = "https://en.wikipedia.org/wiki/List_of_Arrow_episodes"
 
 #=====================================================================================
+
+def ShowSelection():
+
+	#Retrieving Show Database from CSV file to dictionary
+
+	reader = csv.reader(open('TV Show Database.csv'))
+	ShowDB = {}
+	for row in reader:
+	    key = row[0]
+	    ShowDB[key] = row[1:]
+
+	#Transferring Show names from CSV file to list box for user selection and fetching download page
+
+	Show_names = (tuple(ShowDB.keys()))
+
+	layout = [[sg.Text('Select the Show')],
+	         [sg.Listbox(values=Show_names,select_mode=sg.LISTBOX_SELECT_MODE_SINGLE, size=(50,6), bind_return_key=True, auto_size_text=True)],
+	         [sg.Submit()]]
+	window = sg.Window('TV Show Renamer 3.0', layout, keep_on_top=True,finalize=True, size = (400,200))
+	event, values = window.read()
+	name_of_series = values[0][0]
+	print (name_of_series)
+	window.close()
+
+	download_page = ShowDB.get(name_of_series)[0]
+
 
 def DirectoryFetching():
 
