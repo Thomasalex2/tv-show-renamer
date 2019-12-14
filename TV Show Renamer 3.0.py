@@ -44,10 +44,12 @@ def ShowSelection():
 	window = sg.Window('TV Show Renamer 3.0', layout, keep_on_top=True,finalize=True, size = (400,200))
 	event, values = window.read()
 	name_of_series = values[0][0]
-	print (name_of_series)
 	window.close()
 
 	download_page = ShowDB.get(name_of_series)[0]
+
+	return name_of_series, download_page
+
 
 
 def DirectoryFetching():
@@ -75,6 +77,7 @@ def DirectoryFetching():
 def RetrievefromInternet():
 
 	dest_directory = DirectoryFetching()
+	name_of_series, download_page = ShowSelection()
 
 	new_names_list_wiki = []
 	new_names_list = []
@@ -87,16 +90,18 @@ def RetrievefromInternet():
 
 	episode_list = soup.select('tbody .vevent')
 
-	print("\nTo Check if Retrieval is Correct:\n")
+	#print("\nTo Check if Retrieval is Correct:\n")
 
 	for episode in episode_list:
 		episode_no = episode.find('th', attrs={'scope':'row'}).getText()
 		episode_name = episode.find('td', attrs={'class':'summary'}).getText()
 		formatted_name = episode_no + '. ' + episode_name[1:-1]
 		new_names_list_wiki.append(formatted_name)
-		print(formatted_name)
+		
+		#Uncomment below to check if retrieval from wiki page is correct and fucntioning
+		#print(formatted_name,'\n')
 
-	print('\n\n')
+	print ('\n')
 	old_names_list = os.listdir(dest_directory)
 	no_of_operations = len(old_names_list)
 	no_of_operations_done = 0
