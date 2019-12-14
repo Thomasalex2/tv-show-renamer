@@ -10,10 +10,10 @@ sg.change_look_and_feel('DefaultNoMoreNagging')
 #==================================CONFIGURATION=====================================
 
 #Type out Y?N below if verification IS or IS NOT needed
-required_verification = 'N'
+required_verification = 'Y'
 
 #episode_per_season = 24   #Comment out either this or next line
-total_episodes = 160
+total_episodes = 0
 
 #=====================================================================================
 
@@ -41,8 +41,7 @@ def ShowSelection():
 	if (event == 0 or event == 'Submit') and values[0][0] != '':
 		name_of_series = values[0][0]
 		download_page = ShowDB.get(name_of_series)[0]
-		total_episodes = int(input('Enter the number of total episodes after the preceding season - '))
-		return name_of_series, download_page, total_episodes
+		return name_of_series, download_page
 
 	elif event == 'Cancel':
 		print ('\nCancelled\n ==PROGRAM RESTARTED==\n')
@@ -78,7 +77,7 @@ def DirectoryFetching():
 def RetrievefromInternet():
 
 	dest_directory = DirectoryFetching()
-	name_of_series, download_page, total_episodes = ShowSelection()
+	name_of_series, download_page = ShowSelection()
 
 	new_names_list_wiki = []
 	new_names_list = []
@@ -94,8 +93,9 @@ def RetrievefromInternet():
 	#print("\nTo Check if Retrieval is Correct:\n")
 
 	for episode in episode_list:
-		episode_no = episode.find('th', attrs={'scope':'row'}).getText()
-		episode_name = episode.find('td', attrs={'class':'summary'}).getText()
+		episode_details = episode.find_all('td')
+		episode_no = episode_details[0].getText()
+		episode_name = episode_details[1].getText()
 		formatted_name = episode_no + '. ' + episode_name[1:-1]
 		new_names_list_wiki.append(formatted_name)
 		
