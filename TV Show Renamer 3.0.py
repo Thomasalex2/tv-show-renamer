@@ -33,12 +33,12 @@ def ShowSelection():
 
 	layout = [[sg.Text('Select the Show')],
 	         [sg.Listbox(values=Show_names,select_mode=sg.LISTBOX_SELECT_MODE_SINGLE, size=(50,6), bind_return_key=True, auto_size_text=True)],
-	         [sg.Submit(), sg.Cancel()]]
+	         [sg.OK(), sg.Cancel()]]
 	window = sg.Window('TV Show Renamer 3.0', layout, keep_on_top=True,finalize=True, size = (400,200))
 	event, values = window.read()
 	window.close()
 
-	if (event == 0 or event == 'Submit') and values[0][0] != '':
+	if (event == 0 or event == 'OK') and values[0][0] != '':
 		name_of_series = values[0][0]
 		download_page = ShowDB.get(name_of_series)[0]
 		total_episodes = int(input('Enter the number of total episodes after the preceding season - '))
@@ -141,8 +141,8 @@ def RetrievefromInternet():
 
 				file_format = old_name.split('.')[-1]
 
-				new_name = name_of_series + ' - ' + 'S' + season + 'E' + identifier + ' - ' + epi_name_mod + '.' + file_format
-				print(old_name,'\n', '-->', new_name)
+				new_name = name_of_series + f' - S{season}E{identifier} - {epi_name_mod}.{file_format}'
+				print(f'{old_name}\n--> {new_name}')
 
 				
 				if required_verification == 'Y':
@@ -195,7 +195,7 @@ def ReformatNames():
 
 		new_name = name_of_series + ' - ' + 'S' + str('%02d' % season) + 'E' + str('%02d' % (ep_no - subtract_episodes)) + ' - ' + epi_name
 
-		print(old_name,'-->', new_name)
+		print(f'{old_name} --> {new_name}')
 
 		if required_verification == 'Y':
 			verification = input ('Y/N: ')
@@ -236,9 +236,9 @@ def ReformatNames2():
 
 		epi_name = old_name.split('-')[-1]
 
-		new_name = name_of_series + ' - ' + 'S' + season + 'E' + epi_no + ' -' + epi_name
+		new_name = f"{name_of_series} - S{season}E{epi_no} - {epi_name}"
 
-		print(old_name,'-->', new_name)
+		print(f"{old_name} --> {new_name}")
 
 		if required_verification == 'Y':
 			verification = input ('Y/N: ')
@@ -262,7 +262,7 @@ def ReformatNames2():
 
 def main():
 
-	print("Which Algorithm do you want to use to rename ?")
+	print("Which Algorithm do you want to use to rename?")
 	print("1. Retrieve from Internet - 'Show_name - SXXEXX - Episode_name'")
 	print("2. Reformat Names - 'EPISODE_NO. EPISODE_NAME'")
 	print("3. Reformat Names - 'SERIES - [SxEE] - EPISODE_NAME'")
@@ -279,6 +279,7 @@ def main():
 		ReformatNames2()
 
 	else:
-		print("Invalid Choice")
+		print("\nInvalid Choice\nPlease select again\n")
+		main()
 
 main()
