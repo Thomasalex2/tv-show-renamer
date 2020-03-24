@@ -283,3 +283,8 @@ def main():
 		main()
 
 main()
+
+while True:
+
+	if '__name__' == '__main__':
+		main()
