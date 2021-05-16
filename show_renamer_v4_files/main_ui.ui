@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>396</width>
-    <height>507</height>
+    <width>387</width>
+    <height>497</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,6 +16,18 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>387</width>
+    <height>497</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>387</width>
+    <height>497</height>
+   </size>
+  </property>
   <property name="font">
    <font>
     <family>Calibri Light</family>
@@ -23,7 +35,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>TV Show Renamer</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="title_label">
@@ -48,7 +60,7 @@
      <string>TV Show Renamer</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="Internet_rdbtn">
+   <widget class="QRadioButton" name="Internet_rdobtn">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -157,7 +169,7 @@
      <rect>
       <x>20</x>
       <y>240</y>
-      <width>271</width>
+      <width>251</width>
       <height>21</height>
      </rect>
     </property>
@@ -209,48 +221,10 @@
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="selectshow_btn">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>340</y>
-      <width>231</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Calibri Light</family>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Select TV Shows from The Show List</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="show_indicator_label">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>380</y>
-      <width>331</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Calibri Light</family>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Selected Show : None</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="renameShows_btn">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>200</x>
       <y>420</y>
       <width>171</width>
       <height>31</height>
@@ -264,25 +238,6 @@
     </property>
     <property name="text">
      <string>Rename Shows</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="reset_button">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>420</y>
-      <width>161</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Calibri Light</family>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Reset Options</string>
     </property>
    </widget>
    <widget class="QLabel" name="author_label">
@@ -304,12 +259,47 @@
      <string>Developed by Thomas Alex</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="renameShows_btn_2">
+   <widget class="QPushButton" name="browse_btn">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>280</x>
       <y>240</y>
       <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Calibri Light</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Browse</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="Show_comboBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>370</y>
+      <width>351</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="editable">
+     <bool>false</bool>
+    </property>
+    <property name="currentText">
+     <string comment="Select Show from dropdown" extracomment="Select Show from dropdown"/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="show_select_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>291</width>
       <height>21</height>
      </rect>
     </property>
@@ -320,7 +310,20 @@
      </font>
     </property>
     <property name="text">
-     <string>Browse</string>
+     <string>Select TV Shows from The Show List</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="confirmation_checkBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>400</y>
+      <width>181</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Require Confirmation</string>
     </property>
    </widget>
   </widget>
@@ -329,7 +332,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>396</width>
+     <width>387</width>
      <height>21</height>
     </rect>
    </property>

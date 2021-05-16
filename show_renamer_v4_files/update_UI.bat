@@ -1,2 +1,1 @@
 "D:\Documents\BitBucket\Personal\tv-show-renamer\tv-show-renamer-env\Scripts\pyuic5.exe" -x main_ui.ui -o main_ui.py
-"D:\Documents\BitBucket\Personal\tv-show-renamer\tv-show-renamer-env\Scripts\pyuic5.exe" -x show_select_dlg.ui -o show_select_dlg.py
