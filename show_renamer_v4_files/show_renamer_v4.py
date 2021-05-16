@@ -119,6 +119,15 @@ class MainUI(Ui_MainWindow):
             self.ReformatNames2()
             logging.info("Entered Reformat Names 2")
 
+    def checkCorrectShow(self, old_name, show_name):
+        formatted_old_name = "".join(ch for ch in old_name if ch.isalnum()).lower()
+        formatted_new_name = "".join(ch for ch in show_name if ch.isalnum()).lower()
+        if formatted_new_name in formatted_old_name:
+            logging.info("Show chosen seems correct")
+            return True
+        else:
+            logging.info("Show chosen seems wrong. Verification is required")
+            return False
 
     def RetrievefromInternet(self):
 
@@ -195,13 +204,15 @@ class MainUI(Ui_MainWindow):
                         f' - S{season}E{identifier} - {epi_name_mod}.{file_format}'
                     logging.info(f'{old_name}\n--> {new_name}')
 
-                    if self.required_verification == True:
+                    filename_verified = self.checkCorrectShow(old_name, name_of_series)
+
+                    if self.required_verification == True or filename_verified == False:
                         self.confirmationMessageBox(f'{old_name}\n--> {new_name}')
                         if self.returnValue == QMessageBox.Ok:
                             verification = 'Y'
                         elif self.returnValue == QMessageBox.Cancel:
                             verification = 'N'
-                    else:
+                    elif filename_verified == True:
                         verification = 'Y'
 
                     if verification.upper() == 'Y':
