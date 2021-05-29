@@ -9,9 +9,9 @@ import re
 import csv
 import sys
 import logging
+from PyQt5.QtWidgets import *
 from main_ui import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import *
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
@@ -187,6 +187,14 @@ class MainUI(Ui_MainWindow):
                 dot_index = match.find('.')
 
                 subtract_episodes = total_episodes
+                try:
+                    val = int(match[:dot_index])
+                except ValueError:
+                    logging.info("Combined Episode name Detected. Please manually check")
+                    logging.info("Retrieved value: ")
+                    logging.info(match)
+                    logging.info("Old episode number: " + str(identifier))
+                    break
 
                 if int(identifier) == (int(match[:dot_index]) - subtract_episodes):
                     epi_name = match.split(' ', 1)[1]
