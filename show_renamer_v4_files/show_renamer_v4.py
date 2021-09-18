@@ -15,6 +15,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
+QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
+
 class MainUI(Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -83,7 +86,7 @@ class MainUI(Ui_MainWindow):
 
 
     def SelectDirectory(self):
-        self.folderPath = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Directory', "D:\\Downloads")
+        self.folderPath = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Directory', "Downloads")
         logging.info("Selected folder path: " + str(self.folderPath))
         self.directory_textedit.setPlainText(self.folderPath)
 
@@ -189,14 +192,20 @@ class MainUI(Ui_MainWindow):
                 subtract_episodes = total_episodes
                 try:
                     val = int(match[:dot_index])
-                except ValueError:
-                    logging.info("Combined Episode name Detected. Please manually check")
-                    logging.info("Retrieved value: ")
-                    logging.info(match)
-                    logging.info("Old episode number: " + str(identifier))
-                    break
+                except ValueError as e:
+                    try:
+                        val = match[:dot_index]
+                        print("Hello2: " + val.split("–")[0])
+                        val = int(match[:dot_index].split("–")[0]) # Need to implement fix for the consecutive parts of the episodes
+                    except ValueError as e:
+                        logging.info(e)
+                        logging.info("Combined Episode name Detected. Please manually check")
+                        logging.info("Retrieved value: ")
+                        logging.info(match)
+                        logging.info("Old episode number: " + str(identifier))
+                        continue
 
-                if int(identifier) == (int(match[:dot_index]) - subtract_episodes):
+                if int(identifier) == (val - subtract_episodes):
                     epi_name = match.split(' ', 1)[1]
                     epi_name_mod = ""
 
