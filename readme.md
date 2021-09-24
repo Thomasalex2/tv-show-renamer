@@ -19,4 +19,11 @@ It was initially a CLI based python project of mine that I solely developed to m
 
 - The app needs to know how many total episodes were there in the preceding season. This is a huge limitation and something I was not able to solve while I was building this years ago. I will look into it and fix it at some point
 - The app will not be able to rename clubbed episode releases
-- The second and third option for retrieval hasn't been tested properly and should be ignored (I will probably remove it from the UI at some point)
+- The second and third option for retrieval hasn't been tested properly and should be ignored. I had developed it for only my specific use case and would largely remain irrelevant to others (I will probably remove it from the UI at some point)
+
+## Download Link
+Currently, the app has only been tested and built in Windows. But the app can be compiled for Linux and macOS using PyInstaller. 
+
+You can download the Windows 10 version of the app from the link [here](https://github.com/Thomasalex2/tv-show-renamer/releases)
+
+Please feel free to add your own shows to the accompanying CSV database file. 
