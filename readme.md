@@ -1,7 +1,7 @@
 # TV Show Renamer
 This an app developed to batch rename all your favorite shows to the human-readable format with episode names fetched from the Wikipedia link provided in the database
 
-It was a CLI personal project of mine that I solely developed to make my life easier. As I kept iterating, I think it became decent enough that I could share this with others who also loves organizing their media collection
+It was initially a CLI based python project of mine that I solely developed to make my life easier. I however kept improving it over the years and made a simple GUI with PyQT. That's when I felt that app has become decent enough to share this with others who would also love to find out a way to more easily organize their media collection.
 
 ## How to use
 
