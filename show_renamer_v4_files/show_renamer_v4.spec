@@ -5,11 +5,12 @@ block_cipher = None
 
 
 a = Analysis(['show_renamer_v4.py'],
-             pathex=['D:\\Documents\\BitBucket\\Personal\\tv-show-renamer\\show_renamer_v4_files'],
+             pathex=['C:\\Users\\Thomas Alex\\Documents\\BitBucket\\Personal\\tv-show-renamer\\show_renamer_v4_files'],
              binaries=[],
              datas=[],
              hiddenimports=[],
              hookspath=[],
+             hooksconfig={},
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
@@ -18,11 +19,12 @@ a = Analysis(['show_renamer_v4.py'],
              noarchive=False)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
+
 exe = EXE(pyz,
           a.scripts,
           a.binaries,
           a.zipfiles,
-          a.datas,
+          a.datas,  
           [],
           name='show_renamer_v4',
           debug=False,
@@ -31,4 +33,8 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False )
+          console=False,
+          disable_windowed_traceback=False,
+          target_arch=None,
+          codesign_identity=None,
+          entitlements_file=None , icon='logo.ico')
