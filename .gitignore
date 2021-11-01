@@ -6,3 +6,5 @@ show_renamer_v4_filers/__pycache__/
 .vscode
 *.log
 previous_versions
+show_renamer_v4_filers/__pycache__
+show_renamer_v4_filers/.vscode
