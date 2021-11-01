@@ -3,5 +3,6 @@ dist/
 tv-show-renamer-env/
 show_renamer_v4_filers/.vscode/
 show_renamer_v4_filers/__pycache__/
-.vscode/settings.json
+.vscode
 *.log
+previous_versions
