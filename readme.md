@@ -27,6 +27,11 @@ It was initially a CLI based python project of mine that I solely developed to m
 ## Download Link
 Currently, the app has only been tested and built in Windows. But the app can be compiled for Linux and macOS using PyInstaller. 
 
-You can download the Windows 10 version of the app from the link [here](https://github.com/Thomasalex2/tv-show-renamer/releases)
+You can download the Windows 10/11 version of the app from the link [here](https://github.com/Thomasalex2/tv-show-renamer/releases)
 
 Please feel free to add your own shows to the accompanying CSV database file. 
+
+## Demo
+
+https://user-images.githubusercontent.com/24490575/143748767-1444a152-4006-413f-885a-076691c380ca.mp4
+
