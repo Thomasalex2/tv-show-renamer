@@ -8,3 +8,9 @@ show_renamer_v4_filers/__pycache__/
 previous_versions
 show_renamer_v4_filers/__pycache__
 show_renamer_v4_filers/.vscode
+*.mp4
+settings.json
+show_renamer_v4_files/convert.bat
+show_renamer_v4_files/TV Show Database.csv
+show_renamer_v4_files/__pycache__/main_ui.cpython-39.pyc
+show_renamer_v4_files/images/themes.png

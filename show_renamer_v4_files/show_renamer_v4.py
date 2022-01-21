@@ -8,10 +8,14 @@ import bs4
 import re
 import csv
 import sys
+import json
 import logging
+import qdarkstyle
+import webbrowser
 from PyQt5.QtWidgets import *
 from main_ui import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
@@ -22,6 +26,9 @@ class MainUI(Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.app = QtWidgets.QApplication(sys.argv)
+        self.lightTheme = qdarkstyle.load_stylesheet(palette=qdarkstyle.LightPalette)
+        self.DarkTheme = qdarkstyle.load_stylesheet(palette=qdarkstyle.DarkPalette)
+        self.setUserTheme()
         self.MainWindow = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
         self.MainWindow.setWindowIcon(QtGui.QIcon('logo.png'))
@@ -30,6 +37,55 @@ class MainUI(Ui_MainWindow):
         self.browse_btn.clicked.connect(self.SelectDirectory)
         self.renameShows_btn.clicked.connect(self.executeRenamer)
         self.Show_comboBox.addItems(self.retrieveShowList())
+
+        # Menu bar Items
+        self.actionAbout.triggered.connect(self.aboutPage)
+        self.actionClose.triggered.connect(self.closeApplication)
+        self.actionLight_theme.triggered.connect(self.enableLightTheme)
+        self.actionDark_theme.triggered.connect(self.enableDarkTheme)
+        self.actionClassic_theme.triggered.connect(self.enableClassicTheme)
+
+
+    def aboutPage(self):
+        webbrowser.open_new_tab("https://github.com/Thomasalex2/tv-show-renamer")
+
+
+    def closeApplication(self):
+        sys.exit()
+
+    
+    def enableLightTheme(self):
+        self.app.setStyleSheet(self.lightTheme)
+        with open("settings.json", "w") as f:
+            themeSettings = json.dumps({"theme-settings": self.lightTheme})
+            f.write(themeSettings)
+
+
+    def enableDarkTheme(self):
+        self.app.setStyleSheet(self.DarkTheme)
+        with open("settings.json", "w") as f:
+            themeSettings = json.dumps({"theme-settings": self.DarkTheme})
+            f.write(themeSettings)
+
+
+    def enableClassicTheme(self):
+        self.app.setStyleSheet("")
+        with open("settings.json", "w") as f:
+            themeSettings = json.dumps({"theme-settings": ""})
+            f.write(themeSettings)
+
+
+    def setUserTheme(self):
+        if os.path.isfile("settings.json"):
+            with open("settings.json", "r") as f:
+                data = json.load(f)
+                themeSettings = data["theme-settings"]
+                self.app.setStyleSheet(themeSettings)
+        else:
+            self.app.setStyleSheet("")
+            with open("settings.json", "w") as f:
+                themeSettings = json.dumps({"theme-settings": ""})
+                f.write(themeSettings)
 
 
     def show(self):

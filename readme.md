@@ -1,6 +1,6 @@
 # TV Show Renamer
 
-![Screenshot of the App](show_renamer_v4_files/images/app_screenshot.png)
+![Screenshot of the App](show_renamer_v4_files/images/themes.png)
 
 This an app developed to batch rename all your favorite shows to the human-readable format with episode names fetched from the Wikipedia link provided in the database
 

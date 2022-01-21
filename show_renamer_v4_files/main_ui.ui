@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>387</width>
-    <height>500</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>387</width>
-    <height>500</height>
+    <height>520</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>387</width>
-    <height>500</height>
+    <height>520</height>
    </size>
   </property>
   <property name="font">
@@ -37,7 +40,13 @@
   <property name="windowTitle">
    <string>TV Show Renamer</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <widget class="QLabel" name="title_label">
     <property name="geometry">
      <rect>
@@ -55,6 +64,9 @@
       <italic>false</italic>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>TV Show Renamer</string>
@@ -152,7 +164,7 @@
      <rect>
       <x>20</x>
       <y>210</y>
-      <width>101</width>
+      <width>161</width>
       <height>21</height>
      </rect>
     </property>
@@ -192,7 +204,7 @@
      <rect>
       <x>20</x>
       <y>280</y>
-      <width>291</width>
+      <width>311</width>
       <height>21</height>
      </rect>
     </property>
@@ -328,7 +340,7 @@
       <x>20</x>
       <y>410</y>
       <width>181</width>
-      <height>17</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
@@ -342,11 +354,56 @@
      <x>0</x>
      <y>0</y>
      <width>387</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <widget class="QMenu" name="menuChange_theme">
+     <property name="title">
+      <string>Change theme</string>
+     </property>
+     <addaction name="actionClassic_theme"/>
+     <addaction name="actionLight_theme"/>
+     <addaction name="actionDark_theme"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="separator"/>
+    <addaction name="menuChange_theme"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose"/>
+   </widget>
+   <addaction name="menuMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionLight_theme">
+   <property name="text">
+    <string>Light theme</string>
+   </property>
+  </action>
+  <action name="actionDark_theme">
+   <property name="text">
+    <string>Dark theme</string>
+   </property>
+  </action>
+  <action name="actionClassic_theme">
+   <property name="text">
+    <string>Classic theme</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
