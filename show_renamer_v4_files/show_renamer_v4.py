@@ -16,7 +16,6 @@ from PyQt5.QtWidgets import *
 from main_ui import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 logging.basicConfig(filename="logs.log", level=logging.INFO)
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
@@ -28,15 +27,18 @@ class MainUI(Ui_MainWindow):
         self.app = QtWidgets.QApplication(sys.argv)
         self.lightTheme = qdarkstyle.load_stylesheet(palette=qdarkstyle.LightPalette)
         self.DarkTheme = qdarkstyle.load_stylesheet(palette=qdarkstyle.DarkPalette)
-        self.setUserTheme()
+        self.applyUserTheme()
         self.MainWindow = QtWidgets.QMainWindow()
         self.ui = Ui_MainWindow()
         self.MainWindow.setWindowIcon(QtGui.QIcon('logo.png'))
         self.setupUi(self.MainWindow)
+        
+        self.directory_textedit.setPlainText(self.getPreviousDirectory())
 
         self.browse_btn.clicked.connect(self.SelectDirectory)
         self.renameShows_btn.clicked.connect(self.executeRenamer)
-        self.Show_comboBox.addItems(self.retrieveShowList())
+        self.show_comboBox.addItems(self.retrieveShowList())
+        self.show_comboBox.setCurrentText(self.getPreviousShow())
 
         # Menu bar Items
         self.actionAbout.triggered.connect(self.aboutPage)
@@ -56,36 +58,80 @@ class MainUI(Ui_MainWindow):
     
     def enableLightTheme(self):
         self.app.setStyleSheet(self.lightTheme)
-        with open("settings.json", "w") as f:
-            themeSettings = json.dumps({"theme-settings": self.lightTheme})
-            f.write(themeSettings)
+        self.setUserTheme(self.lightTheme)
 
 
     def enableDarkTheme(self):
         self.app.setStyleSheet(self.DarkTheme)
-        with open("settings.json", "w") as f:
-            themeSettings = json.dumps({"theme-settings": self.DarkTheme})
-            f.write(themeSettings)
+        self.setUserTheme(self.DarkTheme)
 
 
     def enableClassicTheme(self):
         self.app.setStyleSheet("")
+        self.setUserTheme("")
+
+
+    def setUserTheme(self, theme):
+        if theme == self.lightTheme:
+            self.setUserPreferences("theme-settings", "light")
+        elif theme == self.DarkTheme:
+            self.setUserPreferences("theme-settings", "dark")
+        else:
+            self.setUserPreferences("theme-settings", "")
+
+
+    def applyUserTheme(self):
+        if self.getUserPreferences("theme-settings") != "":
+            theme = self.getUserPreferences("theme-settings")
+            if theme == "light":
+                self.enableLightTheme()
+            elif theme == "dark":
+                self.enableDarkTheme()
+            else:
+                self.enableClassicTheme()
+
+
+    def setPreviousDirectory(self, folderPath):
+        self.setUserPreferences("previous-directory", folderPath)
+
+
+    def getPreviousDirectory(self):
+        return self.getUserPreferences("previous-directory")
+
+
+    def setPreviousShow(self, show):
+        self.setUserPreferences("previous-show", show)
+
+
+    def getPreviousShow(self):
+        return self.getUserPreferences("previous-show")
+
+
+    def setUserPreferences(self, settingCategory, settings):
+        with open("settings.json", "r") as f:
+            data = json.load(f)
         with open("settings.json", "w") as f:
-            themeSettings = json.dumps({"theme-settings": ""})
-            f.write(themeSettings)
+            data[settingCategory] = settings
+            newSettings = json.dumps(data)
+            f.write(newSettings)
 
 
-    def setUserTheme(self):
+    def getUserPreferences(self, setting):
         if os.path.isfile("settings.json"):
             with open("settings.json", "r") as f:
                 data = json.load(f)
-                themeSettings = data["theme-settings"]
-                self.app.setStyleSheet(themeSettings)
+                try:
+                    preferred_setting = data[setting]
+                    return preferred_setting
+                except KeyError:
+                    with open("settings.json", "w") as f: 
+                        f.write(json.dumps({setting: ""}))
+                    return ""
         else:
-            self.app.setStyleSheet("")
-            with open("settings.json", "w") as f:
-                themeSettings = json.dumps({"theme-settings": ""})
-                f.write(themeSettings)
+            with open("settings.json", "w") as f: 
+                f.write(json.dumps({"theme-settings": "", "previous-directory": "", "previous-show": ""}))
+            return ""
+
 
 
     def show(self):
@@ -142,41 +188,25 @@ class MainUI(Ui_MainWindow):
 
 
     def SelectDirectory(self):
-        self.folderPath = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Directory', "Downloads")
-        logging.info("Selected folder path: " + str(self.folderPath))
-        self.directory_textedit.setPlainText(self.folderPath)
+        folderPath = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Directory', self.getPreviousDirectory())
+        self.directory_textedit.setPlainText(folderPath)
+        logging.info(f"Selected folder path: {folderPath}")
+        self.setPreviousDirectory(folderPath)
 
 
     def executeRenamer(self):
-        
-        if self.episode_text.toPlainText() == "" and self.directory_textedit.toPlainText() == "":
-            self.alertMessageBox("No data given", "Please fill in the data before proceeding")
-            return
-        
-        if self.episode_text.toPlainText().isnumeric() == False:
-            self.alertMessageBox("Invalid Entry", "Episode number entered was invalid")
-            return
-        
         if self.directory_textedit.toPlainText() == "":
             self.alertMessageBox("Invalid Entry", "Directory is not entered")
             return
         elif os.path.exists(self.directory_textedit.toPlainText()) == False:
             self.alertMessageBox("Invalid Entry", "Directory does not Exist")
             return
-        
+
         self.required_verification = self.confirmation_checkBox.isChecked()
         logging.info("Confirmation Required: " + str(self.required_verification))
-
         logging.info("Entered Renamer Function")
-        if self.Internet_rdobtn.isChecked():
-            self.RetrievefromInternet()
-            logging.info("Selected Retrieve from Internet")
-        elif self.reformat_rdobtn.isChecked():
-            self.ReformatNames()
-            logging.info("Entered Reformat Names")
-        elif self.reformat2_rdobtn.isChecked():
-            self.ReformatNames2()
-            logging.info("Entered Reformat Names 2")
+        self.RetrievefromInternet()
+
 
     def checkCorrectShow(self, old_name, show_name):
         formatted_old_name = "".join(ch for ch in old_name if ch.isalnum()).lower()
@@ -188,19 +218,20 @@ class MainUI(Ui_MainWindow):
             logging.info("Show chosen seems wrong. Verification is required")
             return False
 
+
     def RetrievefromInternet(self):
 
-        logging.info("Chosen Directory: " + str(self.directory_textedit.toPlainText()))
-        logging.info("Total Episodes: " + str(self.episode_text.toPlainText()))
-        logging.info("Selected Show: " + str(self.Show_comboBox.currentText()))
-        logging.info("Fetching Link: " + str(self.ShowDB[self.Show_comboBox.currentText()][0]))
+        logging.info(f"Chosen Directory: {self.directory_textedit.toPlainText()}")
+        logging.info(f"Selected Show: {self.show_comboBox.currentText()}")
+        logging.info(f"Fetching Link: {self.ShowDB[self.show_comboBox.currentText()][0]}")
 
         dest_directory = self.directory_textedit.toPlainText()
-        name_of_series = self.Show_comboBox.currentText()
-        download_page = self.ShowDB[self.Show_comboBox.currentText()][0]
-        total_episodes = int(self.episode_text.toPlainText())
+        name_of_series = self.show_comboBox.currentText()
+        download_page = self.ShowDB[self.show_comboBox.currentText()][0]
 
-        new_names_list_wiki = []
+        self.setPreviousShow(name_of_series)
+
+        all_episode_titles = []
         try:
             res = requests.get(download_page)
             res.raise_for_status()
@@ -213,12 +244,10 @@ class MainUI(Ui_MainWindow):
         # HTML Attributes
 
         episode_list = soup.select('tbody .vevent')
-
         for episode in episode_list:
-            episode_no = episode.find('th', attrs={'scope': 'row'}).getText()
+            episode_no = episode.find('td').getText()
             episode_name = episode.find('td', attrs={'class': 'summary'}).getText()
-            formatted_name = episode_no + '. ' + episode_name[1:-1]
-            new_names_list_wiki.append(formatted_name)
+            all_episode_titles.append([episode_no, episode_name.strip('"')])
 
             # Uncomment below to check if retrieval from wiki page is correct and functioning
             # logging.info(formatted_name,'\n')
@@ -240,172 +269,60 @@ class MainUI(Ui_MainWindow):
 
             season = extract.group(1)
             identifier = extract.group(3)
+            episode_detected = False
+            current_season = 0
 
-            for match in new_names_list_wiki:
+            for episode in all_episode_titles:
+                if int(episode[0]) == 1:
+                    current_season += 1
+                if current_season == int(season):
+                    if int(episode[0]) == int(identifier):
+                        episode_title = episode[1]
+                        episode_detected = True
+                        break
+                    
+            if episode_detected == False:
+                self.alertMessageBox("Episode not found", f"Unable to fetch episode name for\n{old_name}")
+                continue
 
-                dot_index = match.find('.')
+            episode_title = "".join(ch for ch in episode_title if ch not in '<>:"\/|?*')
+            file_format = old_name.split('.')[-1]
 
-                subtract_episodes = total_episodes
-                try:
-                    val = int(match[:dot_index])
-                except ValueError as e:
-                    try:
-                        val = match[:dot_index]
-                        print("Hello2: " + val.split("–")[0])
-                        val = int(match[:dot_index].split("–")[0]) # Need to implement fix for the consecutive parts of the episodes
-                    except ValueError as e:
-                        logging.info(e)
-                        logging.info("Combined Episode name Detected. Please manually check")
-                        logging.info("Retrieved value: ")
-                        logging.info(match)
-                        logging.info("Old episode number: " + str(identifier))
-                        continue
+            new_name = name_of_series + \
+                f' - S{season}E{identifier} - {episode_title}.{file_format}'
+            logging.info(f'{old_name}\n --> {new_name}')
 
-                if int(identifier) == (val - subtract_episodes):
-                    epi_name = match.split(' ', 1)[1]
-                    epi_name_mod = ""
+            filename_verified = self.checkCorrectShow(old_name, name_of_series)
 
-                    for ch in epi_name:
-                        if ch in '<>:"\/|?*':
-                            epi_name_mod = epi_name_mod + ""
-                        else:
-                            epi_name_mod = epi_name_mod + ch
+            if self.required_verification == True or filename_verified == False:
+                self.confirmationMessageBox(f'{old_name}\n--> {new_name}')
+                if self.returnValue == QMessageBox.Ok:
+                    verification = 'Y'
+                elif self.returnValue == QMessageBox.Cancel:
+                    verification = 'N'
+            elif filename_verified == True:
+                verification = 'Y'
 
-                    file_format = old_name.split('.')[-1]
-
-                    new_name = name_of_series + \
-                        f' - S{season}E{identifier} - {epi_name_mod}.{file_format}'
-                    logging.info(f'{old_name}\n--> {new_name}')
-
-                    filename_verified = self.checkCorrectShow(old_name, name_of_series)
-
-                    if self.required_verification == True or filename_verified == False:
-                        self.confirmationMessageBox(f'{old_name}\n--> {new_name}')
-                        if self.returnValue == QMessageBox.Ok:
-                            verification = 'Y'
-                        elif self.returnValue == QMessageBox.Cancel:
-                            verification = 'N'
-                    elif filename_verified == True:
-                        verification = 'Y'
-
-                    if verification.upper() == 'Y':
-                        old_path = os.path.join(dest_directory, old_name)
-                        new_path = os.path.join(dest_directory, new_name)
-                        os.rename(old_path, new_path)
-                        no_of_operations_done += 1
-                        logging.info('Successfully Renamed\n')
+            if verification.upper() == 'Y':
+                old_path = os.path.join(dest_directory, old_name)
+                new_path = os.path.join(dest_directory, new_name)
+                os.rename(old_path, new_path)
+                no_of_operations_done += 1
+                logging.info('Successfully Renamed\n')
 
         if no_of_operations == no_of_operations_done:
             logging.info("All Files renamed successfully\n\n")
             self.infoMessageBox("Successful", "All Files renamed successfully")
         else:
-            logging.info(str(no_of_operations - no_of_operations_done) + "file(s) were not renamed")
-            self.alertMessageBox("Notice", str(no_of_operations - no_of_operations_done) + " file(s) were not renamed")
-
-
-    def ReformatNames2(self):
-
-        dest_directory = self.directory_textedit.toPlainText()
-        old_names_list = os.listdir(dest_directory)
-        no_of_operations = len(old_names_list)
-        no_of_operations_done = 0
-        pattern = re.compile(r'\b(\d{1,2})\w(\d\d)\b')
-
-        for old_name in old_names_list:
-
-            extract = pattern.search(old_name)
-
-            if extract == None:
-                logging.info("Filenames are not in the expected format\n")
-                return
-
-            season = str('%02d' % int(extract.group(1)))
-            epi_no = str('%02d' % int(extract.group(2)))
-
-            epi_name = old_name.split('-')[-1]
-
-            new_name = f"{name_of_series} - S{season}E{epi_no} - {epi_name}"
-
-            logging.info(f"{old_name} --> {new_name}")
-
-            if self.required_verification == 'Y':
-                verification = input('Y/N: ')
-            else:
-                verification = 'Y'
-
-            if verification.upper() == 'Y':
-                old_path = os.path.join(dest_directory, old_name)
-                new_path = os.path.join(dest_directory, new_name)
-                os.rename(old_path, new_path)
-                no_of_operations_done += 1
-                logging.info()
-
-        if no_of_operations == no_of_operations_done:
-            logging.info("All Files renamed successfully")
-        else:
-            logging.info(str(no_of_operations - no_of_operations_done) + " file(s) were not renamed")
-
-
-# ==============================FOR XX.EPISODE_NAME FORMAT========================================
-
-    def ReformatNames(self):
-
-        dest_directory = self.directory_textedit.toPlainText()
-        season = eval(input("Season: "))
-        old_names_list = os.listdir(dest_directory)
-        no_of_operations = len(old_names_list)
-        no_of_operations_done = 0
-
-        for old_name in old_names_list:
-
-            try:
-                ep_no = int(old_name.split('.', 1)[0])
-            except ValueError:
-                continue
-
-            epi_name = old_name.split(' ', 1)[1]
-
-            try:
-                subtract_episodes = episode_per_season * (season - 1)
-            except NameError:
-                subtract_episodes = total_episodes
-
-            if ep_no - subtract_episodes < 0:
-                logging.info("\nEpisode Number changing to Negative")
-                logging.info("Please Check ReformatNames Conditions")
-                return
-
-            new_name = name_of_series + ' - ' + 'S' + \
-                str('%02d' % season) + 'E' + str('%02d' %
-                                                (ep_no - subtract_episodes)) + ' - ' + epi_name
-
-            logging.info(f'{old_name} --> {new_name}')
-
-            if self.required_verification == 'Y':
-                verification = input('Y/N: ')
-            else:
-                verification = 'Y'
-
-            if verification.upper() == 'Y':
-                old_path = os.path.join(dest_directory, old_name)
-                new_path = os.path.join(dest_directory, new_name)
-                os.rename(old_path, new_path)
-                no_of_operations_done += 1
-                logging.info()
-
-        if no_of_operations == no_of_operations_done:
-            logging.info("All Files renamed successfully")
-        else:
-            logging.info(str(no_of_operations - no_of_operations_done) + " files were not renamed")
-
+            logging.info(f"{(no_of_operations - no_of_operations_done)} file(s) were not renamed")
+            self.infoMessageBox(
+                "Notice", f"{(no_of_operations - no_of_operations_done)} file(s) were not renamed\n{no_of_operations_done} were renamed successfully")
 
 # ====================================MAIN=============================================
 
 def main():
     app = MainUI()
     app.show()
-
-main()
 
 if __name__ == "__main__":
     main()
