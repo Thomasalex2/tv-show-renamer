@@ -38,5 +38,8 @@ https://user-images.githubusercontent.com/24490575/144751676-4afb5daf-a886-4eb7-
 ## Upcoming Features
 - Give the app the ability to rename clubbed episodes as well
 - Have an option to add shows directly through the app without touching the CSV file
+- Auto detect show name from the file names
+- Rename a folder containing shows from different TV shows
+- Add a terminate option in case you want to stop the renaming process midway (will only be possible if "Require confirmation" is checked, otherwise the app will be too fast for you to stop it :sweat_smile:)
 
 Feel free to raise a request if any other features would be useful to have
