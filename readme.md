@@ -30,9 +30,8 @@ You can download the Windows 10/11 version of the app from the link [here](https
 Please feel free to add your own shows to the accompanying CSV database file. 
 
 ## Demo
-This is a demo of the older version of the app (v4.0). The procedure in the new version is much simpler and does not require to type in the total number of episodes before the preceding season
 
-https://user-images.githubusercontent.com/24490575/144751676-4afb5daf-a886-4eb7-8ae7-0848cdb6dbdc.mp4
+https://user-images.githubusercontent.com/24490575/151146979-ed2c5baf-cc96-4ab5-87ec-45f439bb20ec.mp4
 
 
 ## Upcoming Features
