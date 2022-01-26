@@ -1,6 +1,8 @@
 # TV Show Renamer
 
-![Screenshot of the App](show_renamer_v4_files/images/themes-v4.2.png)
+| ![Screenshot of the App](show_renamer_v4_files/images/themes-v4.2.png) |
+|:--:| 
+| *TV Show Renamer v4.2* |
 
 This an app developed to batch rename all your favorite shows to the human-readable format with episode names fetched from the Wikipedia link provided in the database
 
@@ -33,3 +35,8 @@ This is a demo of the older version of the app (v4.0). The procedure in the new 
 https://user-images.githubusercontent.com/24490575/144751676-4afb5daf-a886-4eb7-8ae7-0848cdb6dbdc.mp4
 
 
+## Upcoming Features
+- Give the app the ability to rename clubbed episodes as well
+- Have an option to add shows directly through the app without touching the CSV file
+
+Feel free to raise a request if any other features would be useful to have
